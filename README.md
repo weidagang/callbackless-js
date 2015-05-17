@@ -33,11 +33,29 @@ var readFile$ = cbs_fs.readFile$;
  * no callbacks.
  */
 function testFilePromise_functor() {
+  // readFile :: String -> Promise<String>
+  // readFile returns a promise of the contents of the file
   var data1$ = readFile('data/data_1.txt');
   var data2$ = readFile('data/data_2.txt');
+
+  // toUpperCase$ :: Promise<String> -> Promise<String>
+  // at this point, the value of data1 may not be available, but we don't care,
+  // because establishing the relationship between 2 promises doesn't require
+  // to know their actual value.
   var upperCaseData1$ = toUpperCase$(data1$);
+  
+  // concat$ :: Promise<String> -> Promise<String> -> Promise<String>
+  // concatenates 2 promises of string returns another promise of string
   var data1AndData2$ = concat$(upperCaseData1$, data2$); 
+  
+  // unit :: String -> Promise<String>
+  // wrapps the directly available data into the computation context of promise
+  // then it could work with the lifted functions
   var expectedData1AndData2$ = unit("HELLO CALLBACKLESS.JS!cool!");
+  
+  // assertEquals$ :: Promise<String> -> Promise<String> -> void
+  // asserts the values of the 2 promises are equal. The underlying assert will
+  // be invoked when both of the 2 promises are finished.
   assertEquals$(expectedData1AndData2$, data1AndData2$);
 }
 
@@ -51,8 +69,16 @@ function testFilePromise_functor() {
  */
 function testFilePromise_monad() {
   var path1 = 'data/file_1.txt';
+
+  // readFile :: String -> Promise<String>
+  // readFile returns a promise of the contents of the file
   var path2$ = readFile('data/file_1.txt');
+  
+  // readFile$ :: Promise<String> -> Promise<String>
+  // readFile$ is the flatMapped form of readFile, which accepts a promise type
+  // path parameter.
   var path3$ = readFile$(path2$);
+
   var data3$ = readFile$(path3$);
   var expectedData3$ = unit('Hey, I am here!')
   assertEquals$(expectedData3$, data3$);
