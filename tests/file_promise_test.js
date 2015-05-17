@@ -1,15 +1,15 @@
 var assert = require('assert');
 
-// Imports core APIs from the callbackless module
+// Imports the core APIs from the callbackless module
 var cbs = require('../callbackless.js');
 var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
 
-// Imports the readFile API from the callbackless-fs module.
-// There will be HTTP API, database API ...
+// Imports the file APIs from the callbackless-fs module.
 var cbs_fs = require('../callbackless-fs.js');
+var readFile = cbs_fs.readFile;
 var readFile$ = cbs_fs.readFile$;
 
 /**
@@ -30,11 +30,11 @@ function testFilePromise_functor() {
   // For better demonstration, I used a local variable for each step. It's not necessary, feel free
   // to inline them.
 
-  // readFile$ returns a promise of the data which will be available in the future, but we can do
+  // readFile returns a promise of the data which will be available in the future, but we can do
   // operations on it immediately before it's actually available.
-  var data1$ = readFile$('data_1.txt'); // at this point we don't know the content of data_1.txt
-  var data2$ = readFile$('data_2.txt'); // at this point we don't know the content of data_2.txt
-  var data3$ = readFile$('data_3.txt'); // at this point we don't know the content of data_3.txt
+  var data1$ = readFile('data/data_1.txt'); // at this point we don't know the content of data_1.txt
+  var data2$ = readFile('data/data_2.txt'); // at this point we don't know the content of data_2.txt
+  var data3$ = readFile('data/data_3.txt'); // at this point we don't know the content of data_3.txt
   
   // fmap turns (lifts) a function of type T -> R into a function of type Promise<T> -> Promise<R>.
   // Therefore, it allows us to reuse the function in a different computational context (promise).
@@ -78,20 +78,25 @@ function testFilePromise_functor() {
 
   // print the data1 + data2 to STDOUT. The print$ is inlined here.
   // The underlying _print will be invoked when the 2 promises are finished.
-  fmap(_print)(concat$(data1$, data2$));
+  //fmap(_print)(concat$(data1$, data2$));
 }
 
+/**
+ * The test data contains 3 files. The contents of the previous file is the path of the next file.
+ * This test starts from the path of the first file, then follows the path one by one until the
+ * third file.
+ *
+ * During the execution, there're 3 asynchronous file reading operations involved under the hood,
+ * but all the callbacks are abstracted away by the promise.
+ */
 function testFilePromise_monad() {
-  // at this point we don't know the content of data_3.txt
-  var data3$ = readFile$('data_3.txt'); 
-  // the contents of data_3.txt is another file's name which is data_4.txt
-  var filename$ = data3$;
-  // follows the file name to read the file
-  var data4$ = flatMap(readFile$)(filename$);
-  // the contents of data_4.txt
-  var expectedData4$ = unit('I love promise!')
+  var path1 = 'data/file_1.txt';
+  var path2$ = readFile('data/file_1.txt');
+  var path3$ = readFile$(path2$);
+  var data3$ = readFile$(path3$);
+  var expectedData3$ = unit('Hey, I am here!')
   var assertEquals$ = liftA(_assertEquals);
-  assertEquals$(expectedData4$, data4$);
+  assertEquals$(expectedData3$, data3$);
 }
 
 function _toUpperCase(str) {

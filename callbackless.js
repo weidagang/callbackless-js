@@ -208,7 +208,7 @@ var callbackless = (function() {
    * Lifts a function of type T -> R into a function of type
    * Promise<T> -> Promise<R>.
    *
-   * fmap makes this Promise abstracton a Functor.
+   * fmap makes a Functor.
    *
    * fmap :: (T -> R) -> Promise<T> -> Promise<R>
    * @param f :: T -> R
@@ -244,7 +244,7 @@ var callbackless = (function() {
         promiseT.__notifySuccess__(data);
       });
       innerPromiseT.fail(function (error) {
-        promiseT.__notifyFailure(error);
+        promiseT.__notifyFailure__(error);
       });
     });
     promiseOfPromiseT.fail(function (error) {
@@ -257,8 +257,7 @@ var callbackless = (function() {
    * Lifts a function of type T -> Promise<R> into a function of type
    * Promise<T> -> Promise<R>.
    *
-   * flatMap makes this Promise abstracton a Monad. It's the bind operator with different
-   * parameters order.
+   * flatMap makes a Monad. It's the bind operator of Monad with different parameters order.
    *
    * flatMap :: (T -> Promise<R>) -> Promise<T> -> Promise<R>
    * @param f :: T -> Promise<R>
