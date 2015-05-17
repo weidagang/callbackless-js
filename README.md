@@ -55,3 +55,5 @@ function testFilePromise_monad() {
   assertEquals$(expectedData3$, data3$);
 }
 ```
+
+See tests for more details.

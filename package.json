@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node tests/file_promise_test.js"
+    "test": "node tests/test-file-promise.js"
   },
   "repository": {
     "type": "git",
