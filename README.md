@@ -3,9 +3,9 @@ callbackless.js - abstract away callbacks
 
 JavaScript is asynchronous in nature, but too many callbacks put the code in a mess. Over the years, the community has created a bunch of libraries trying to make it possible to write sync code to express async logic.
 
-However, it seems to me that until today none of them are doing the thing right. The Promise abstraction in some of the libraries looks awkward. It doesn't make much sense than the async APIs, we can still smell the callbacks. And some of the libraries involve compliations and ``eval`` calls, which are really unnecessary.
+However, it seems to me that until today none of them are doing the thing right. The Promise abstraction in some of the libraries looks awkward. It doesn't make much sense than the async APIs, we can still smell the callbacks. And some of the libraries involve compilations and ``eval`` calls, which are really unnecessary.
 
-Callbackless.js is the effect to achieve "abstract away callbacks" in a much better way. It's in plain ECMAScript 5, doesn't depend on any advanced features of ECMAScript 6 (e.g. Generator), and there's no compliation and ``eval`` involved.
+Callbackless.js is the effect to achieve "abstract away callbacks" in a much better way. It's in plain ECMAScript 5, doesn't depend on any advanced features of ECMAScript 6 (e.g. Generator), and there's no compilations and ``eval`` involved.
 
 The core of callbackless.js is the abstraction of Promise Monad. Forget the Promise you have known in other libraries, they're totally different. A monad is a computation which returns values of type T. A promise monad is a computation which will be returning a value of type T in the future (maybe asynchronously). It turns out that callbackless.js is not only a better way to abstract away callbacks than the existing libraries, but also a great tutorial for Functor and Monad. I hope every JavaScript programmer can understand the advanced functional abstractions like Functor and Monad with this library.
 
