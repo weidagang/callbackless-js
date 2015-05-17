@@ -1,0 +1,26 @@
+{
+  "name": "callbackless",
+  "version": "0.1.0",
+  "description": "Abstract away the callbacks from JavaScript",
+  "main": "callbackless.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node tests/file_promise_test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/weidagang/callbackless-js.git"
+  },
+  "keywords": [
+    "promise",
+    "callbackless",
+    "monad",
+  ],
+  "author": "weidagang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/weidagang/callbackless-js/issues"
+  }
+}
