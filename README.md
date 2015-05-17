@@ -25,10 +25,12 @@ var readFile = cbs_fs.readFile;
 var readFile$ = cbs_fs.readFile$;
 
 /**
- * This test case reads 2 text files asynchronously, converts the contents of the first file to
- * upper case, then concatenates it with the contents of the second file.
+ * This test case reads 2 text files asynchronously, converts the contents of
+ * the first file to upper case, then concatenates it with the contents of the
+ * second file.
  *
- * During the execution, there're 2 async file reading operations, but you see no callbacks.
+ * During the execution, there're 2 async file reading operations, but you see
+ * no callbacks.
  */
 function testFilePromise_functor() {
   var data1$ = readFile('data/data_1.txt');
@@ -40,11 +42,12 @@ function testFilePromise_functor() {
 }
 
 /**
- * The test data contains 3 files. The contents of the previous file is the path of the next file.
- * This test starts from the path of the first file, then follows the path one by one until the
- * third file.
+ * The test data contains 3 files. The contents of the previous file is the path
+ * of the next file. This test starts from the path of the first file, then
+ * follows the path one by one until the third file.
  *
- * During the execution, there're 3 async file reading operations, but you see no callbacks.
+ * During the execution, there're 2 async file reading operations, but you see
+ * no callbacks.
  */
 function testFilePromise_monad() {
   var path1 = 'data/file_1.txt';
@@ -56,4 +59,4 @@ function testFilePromise_monad() {
 }
 ```
 
-See tests for more details.
+See [tests](https://github.com/weidagang/callbackless-js/blob/master/tests/test-file-promise.js) for more details.
