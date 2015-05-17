@@ -1,4 +1,4 @@
-callbackless.js 
+callbackless.js - abstract away callbacks
 =======
 
 JavaScript is asynchronous in nature, but too many callbacks put the code in a mess. Over the years, the community has created a bunch of libraries trying to abstract callbacks away and allowing programmers to write sync code to express async logic.
