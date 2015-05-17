@@ -241,7 +241,7 @@ var callbackless = (function() {
     promiseOfPromiseT.succeed(function (innerPromiseT) {
       // the inner layer of promise
       innerPromiseT.succeed(function (data) {
-        promiseT.__notifySuccess__(f(data));
+        promiseT.__notifySuccess__(data);
       });
       innerPromiseT.fail(function (error) {
         promiseT.__notifyFailure(error);
@@ -324,6 +324,8 @@ var callbackless = (function() {
     unit : unit,
     fmap : fmap,
     liftA : liftA,
+    join : join,
+    flatMap : flatMap,
   };
 })();
 

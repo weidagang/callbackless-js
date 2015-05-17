@@ -5,6 +5,7 @@ var cbs = require('../callbackless.js');
 var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
+var flatMap = cbs.flatMap;
 
 // Imports the readFile API from the callbackless-fs module.
 // There will be HTTP API, database API ...
@@ -25,7 +26,7 @@ var readFile$ = cbs_fs.readFile$;
  * <fn>$: the lifted function for the original function fn, which accepts and returns promises, e.g.
  *        the toUpperCase$ is the lifted function for toUpperCase which works on string promises.
  */
-function test_filePromise() {
+function testFilePromise_functor() {
   // For better demonstration, I used a local variable for each step. It's not necessary, feel free
   // to inline them.
 
@@ -33,6 +34,7 @@ function test_filePromise() {
   // operations on it immediately before it's actually available.
   var data1$ = readFile$('data_1.txt'); // at this point we don't know the content of data_1.txt
   var data2$ = readFile$('data_2.txt'); // at this point we don't know the content of data_2.txt
+  var data3$ = readFile$('data_3.txt'); // at this point we don't know the content of data_3.txt
   
   // fmap turns (lifts) a function of type T -> R into a function of type Promise<T> -> Promise<R>.
   // Therefore, it allows us to reuse the function in a different computational context (promise).
@@ -79,6 +81,19 @@ function test_filePromise() {
   fmap(_print)(concat$(data1$, data2$));
 }
 
+function testFilePromise_monad() {
+  // at this point we don't know the content of data_3.txt
+  var data3$ = readFile$('data_3.txt'); 
+  // the contents of data_3.txt is another file's name which is data_4.txt
+  var filename$ = data3$;
+  // follows the file name to read the file
+  var data4$ = flatMap(readFile$)(filename$);
+  // the contents of data_4.txt
+  var expectedData4$ = unit('I love promise!')
+  var assertEquals$ = liftA(_assertEquals);
+  assertEquals$(expectedData4$, data4$);
+}
+
 function _toUpperCase(str) {
   return str.toUpperCase();
 }
@@ -100,4 +115,5 @@ function _assertEquals(expected, actual) {
   console.log("PASSED");
 }
 
-test_filePromise();
+testFilePromise_functor();
+testFilePromise_monad();
