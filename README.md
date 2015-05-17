@@ -12,14 +12,14 @@ The core of callbackless.js is the abstraction of Promise Monad. Forget the Prom
 Now, let's get a sense of how the code looks like with a sample code:
 
 ```javascript
-// Imports the core APIs from the callbackless module
+// import the core APIs from the callbackless module
 var cbs = require('../callbackless.js');
 var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
 
-// Imports the file APIs from the callbackless-fs module.
+// import the file APIs from the callbackless-fs module
 var cbs_fs = require('../callbackless-fs.js');
 var readFile = cbs_fs.readFile;
 var readFile$ = cbs_fs.readFile$;

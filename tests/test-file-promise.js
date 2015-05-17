@@ -1,13 +1,13 @@
 var assert = require('assert');
 
-// Imports the core APIs from the callbackless module
+// imports the core APIs from the callbackless module
 var cbs = require('../callbackless.js');
 var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
 
-// Imports the file APIs from the callbackless-fs module.
+// imports the file APIs from the callbackless-fs module
 var cbs_fs = require('../callbackless-fs.js');
 var readFile = cbs_fs.readFile;
 var readFile$ = cbs_fs.readFile$;
