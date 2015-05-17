@@ -9,7 +9,7 @@ Callbackless.js is the effect to achieve "abstract away callbacks" in a much bet
 
 The core of callbackless.js is the abstraction of Promise Monad. Forget the Promise you have known in other libraries, they're totally different. A monad is a computation which returns values of type T. A promise monad is a computation which will be returning a value of type T in the future (maybe asynchronously). It turns out that callbackless.js is not only a successful application of Functor and Monad in JavaScript, but also a great tutorial for them. I hope every JavaScript programmer would be able to understand these advanced functional abstractions with this library.
 
-Now, let's get a sense how the code looks like with a sample code:
+Now, let's get a sense of how the code looks like with a sample code:
 
 ```javascript
 // Imports the core APIs from the callbackless module
