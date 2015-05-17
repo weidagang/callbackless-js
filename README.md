@@ -7,9 +7,9 @@ However, it seems to me that until today none of them are doing the thing right.
 
 Callbackless.js is the effect to achieve "abstract away callbacks" in a much better way. It's in plain ECMAScript 5, doesn't depend on any advanced features of ECMAScript 6 (e.g. Generator), and there's no compilations and ``eval`` involved.
 
-The core of callbackless.js is the abstraction of Promise Monad. Forget the Promise you have known in other libraries, they're totally different. A monad is a computation which returns values of type T. A promise monad is a computation which will be returning a value of type T in the future (maybe asynchronously). It turns out that callbackless.js is not only a better way to abstract away callbacks than the existing libraries, but also a great tutorial for Functor and Monad. I hope every JavaScript programmer can understand the advanced functional abstractions like Functor and Monad with this library.
+The core of callbackless.js is the abstraction of Promise Monad. Forget the Promise you have known in other libraries, they're totally different. A monad is a computation which returns values of type T. A promise monad is a computation which will be returning a value of type T in the future (maybe asynchronously). It turns out that callbackless.js is not only a successful application of Functor and Monad in JavaScript, but also a great tutorial for them. I hope every JavaScript programmer would be able to understand these advanced functional abstractions with this library.
 
-Let's get a sense how the code looks like with a sample code:
+Now, let's get a sense how the code looks like with a sample code:
 
 ```javascript
 // Imports the core APIs from the callbackless module
