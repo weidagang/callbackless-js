@@ -283,36 +283,29 @@ var callbackless = (function() {
    * @return liftedF :: Promise<T1> -> Promise<T2> -> ... Promise<Tn> -> Promise<R>
    */
   function liftA(f) {
-    var numArgs = f.length;
     // The parameters of liftedF are implicit because the numArgs is only known at runtime.
     // This is just a syntactic trick of JS, anyhow don't forget the type of liftedF is
     // Promise<T1> -> Promise<T2> -> ... Promise<Tn> -> Promise<R>.
     var liftedF = function() {
-      var promiseR = promise();
-
+      var numArgs = arguments.length;
+      var r$ = promise();
+      var finishedCount = 0;
       var promisesT = [];
       for (var i = 0; i < arguments.length; i++) {
-        promisesT.push(arguments[i]);
-      }
-      // if the actual number of arguments is less than the expected, add unit(null) as the default
-      for (var i = arguments.length; i < numArgs; i++) {
-        promisesT.push(unit(null));
-      }
-
-      var finishedCount = promisesT.length - arguments.length;
-      for (var i = 0; i < numArgs; i++) {
-        promisesT[i].finish(function (state, data, error) {
+        var arg$ = arguments[i];
+        promisesT.push(arg$);
+        arg$.finish(function (state, data, error) {
           finishedCount++;
-          // all the promises have finished, then finishes promiseR
+          // all the promises have finished
           if (finishedCount == numArgs) {
-            var args = promisesT.map(function (promiseT) { return promiseT.data(); });
+            var args = promisesT.map(function (t$) { return t$.data(); });
             var r = f.apply(null, args);
-            promiseR.__notifySuccess__(r);
+            r$.__notifySuccess__(r);
           }
         });
       }
 
-      return promiseR;
+      return r$;
     };
     return liftedF;
   }
