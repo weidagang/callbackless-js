@@ -95,4 +95,4 @@ function testFilePromise_monad() {
 }
 ```
 
-See [tests](https://github.com/weidagang/callbackless-js/blob/master/tests/test-file-promise.js) for more details.
+See [tests](https://github.com/weidagang/callbackless-js/blob/master/tests/test-callbackless-fs.js) for more details.
