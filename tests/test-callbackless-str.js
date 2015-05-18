@@ -10,6 +10,7 @@ var flatMap = cbs.flatMap;
 // import the string APIs from the callbackless-str module
 var cbs_str = require('../callbackless-str.js');
 var charAt$ = cbs_str.charAt$;
+var toUpperCase$ = cbs_str.toUpperCase$;
 var concat$ = cbs_str.concat$;
 
 // import the testing utils
@@ -31,6 +32,14 @@ function testStringPromise_charAt$() {
   assertEquals$(unit(""), c999$);
 }
 
+function testStringPromise_toUpperCase$() {
+  console.log("Running " + arguments.callee.name);
+
+  assertEquals$(unit(null), toUpperCase$(unit(null)));
+  assertEquals$(unit(""), toUpperCase$(unit("")));
+  assertEquals$(unit("HELLO CALLBACKLESS"), toUpperCase$(unit("Hello Callbackless")));
+}
+
 function testStringPromise_concat$() {
   console.log("Running " + arguments.callee.name);
 
@@ -43,5 +52,10 @@ function testStringPromise_concat$() {
   assertEquals$(unit("hello callbackless!"), concat$(str1$, str2$, str3$));
 }
 
-testStringPromise_charAt$();
-testStringPromise_concat$();
+function runTests() {
+  testStringPromise_charAt$();
+  testStringPromise_toUpperCase$();
+  testStringPromise_concat$();
+}
+
+runTests();

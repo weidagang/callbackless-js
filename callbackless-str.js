@@ -16,17 +16,34 @@ var cbs_str = (function() {
   }
   
   /**
+   * Returns the promise of the upper case string.
+   *
+   * toUpperCase$ :: Promise<String> -> Promise<String>
+   */
+  function toUpperCase$(str$) {
+    return fmap(function (str) {return str != null ? str.toUpperCase() : null;})(str$);
+  }
+  
+  /**
    * Combines the promises of two or more strings and returns a new promise of string.
    *
    * concat$ :: Promise<String> -> Promise<String> ... -> Promise<String>
    */
   function concat$() {
-    return liftA(function () { return arguments.join(""); }).apply(arguments);
+    function concat() {
+      var result = "";
+      for (var i = 0; i < arguments.length; i++) {
+        result = result.concat(arguments[i]);
+      }
+      return result;
+    }
+    return liftA(concat).apply(null, arguments);
   }
 
   // module exports
   return {
     charAt$ : charAt$,
+    toUpperCase$ : toUpperCase$,
     concat$ : concat$
   };
 })();

@@ -20,6 +20,7 @@ var cbs_testing = (function() {
   var assertEquals$ = liftA(function (expected, actual) {
     assert(
       expected == actual, 'assertEquals failed, expected: ' + expected + ', actual: ' + actual);
+    console.log("ASSERTION PASSED");
     return true;
   });
   

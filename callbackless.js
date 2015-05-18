@@ -1,7 +1,6 @@
 /**
  * @author Dagang Wei (weidagang@gmail.com)
  */
-
 var callbackless = (function() {
   /**
    * Creates a promise.
@@ -309,6 +308,33 @@ var callbackless = (function() {
     };
     return liftedF;
   }
+
+  /**
+   * Chains 2 promises.
+   */
+  function chain$(p1$, p2$) {
+    p1$
+      .succeed(function(data) { p2$.__notifySuccess__(data); })
+      .fail(function(error) { p2$.__notifyFailure__(error); });
+  }
+  
+  /**
+   * Executes the function f when the promise finishes.
+   *
+   * continue$ :: Promise<T> -> (Promise<T> -> Promise<R>) -> Promise<R> 
+   */
+  function continue$(p1$, f) {
+    var r2$ = promise();
+    p1$.finish(function() {
+      var r1$ = f(p1$);
+      if (r1$ != null) {
+        chain$(r1$, r2$);
+      } else {
+        r2$.__notifySuccess__(null);
+      }
+    });
+    return r2$;
+  }
   
   // module exports
   return {
@@ -318,6 +344,7 @@ var callbackless = (function() {
     liftA : liftA,
     join : join,
     flatMap : flatMap,
+    continue$ : continue$,
   };
 })();
 
