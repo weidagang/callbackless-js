@@ -12,17 +12,27 @@ The core of callbackless.js is the abstraction of Promise Monad. Forget about th
 Now, let's get a sense of how the code looks like with a sample code:
 
 ```javascript
-// import the core APIs from the callbackless module
+// import the core APIs
 var cbs = require('../callbackless.js');
 var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
+var continue$ = cbs.continue$;
 
-// import the file APIs from the callbackless-fs module
+// import the file APIs
 var cbs_fs = require('../callbackless-fs.js');
 var readFile = cbs_fs.readFile;
 var readFile$ = cbs_fs.readFile$;
+
+// import the string APIs
+var cbs_str = require('../callbackless-str.js');
+var toUpperCase$ = cbs_str.toUpperCase$;
+var concat$ = cbs_str.concat$;
+
+// import the testing APIs
+var cbs_testing = require('../callbackless-testing.js');
+var assertEquals$ = cbs_testing.assertEquals$;
 
 /**
  * This test case reads 2 text files asynchronously, converts the contents of
