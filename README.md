@@ -65,7 +65,7 @@ function testFilePromise_functor() {
   // then it could work with the lifted functions
   var expectedData1AndData2$ = unit("HELLO CALLBACKLESS.JS!cool!");
   
-  // assertEquals$ :: Promise<String> -> Promise<String> -> void
+  // assertEquals$ :: Promise<String> -> Promise<String> -> Promise<Boolean>
   // asserts the values of the 2 promises are equal. The underlying assert will
   // be invoked when both of the 2 promises are finished.
   assertEquals$(expectedData1AndData2$, data1AndData2$);
