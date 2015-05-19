@@ -74,7 +74,7 @@ function testFilePromise_functor() {
  * of the next file. This test starts from the path of the first file, then
  * follows the path one by one until the third file.
  *
- * During the execution, there're 2 async file reading operations, but you see
+ * During the execution, there're 3 async file reading operations, but you see
  * no callbacks.
  */
 function testFilePromise_monad() {
