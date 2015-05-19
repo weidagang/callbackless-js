@@ -1,5 +1,7 @@
 /**
- * This module contains the implementation of Timer Promise.
+ * This module implements the Timer Promise.
+ *
+ * author: Dagang Wei (weidagang@gmail.com)
  */
 var cbs_timer = (function() {
   var cbs = require('./callbackless.js');

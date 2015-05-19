@@ -1,5 +1,7 @@
 /**
- * This module contains the testing utils.
+ * This module contains a set of testing utils.
+ *
+ * author: Dagang Wei (weidagang@gmail.com)
  */
 var cbs_testing = (function() {
   // import dependencies

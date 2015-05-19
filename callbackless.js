@@ -1,4 +1,8 @@
 /**
+ * This module implements the Promise Monad. A specific Promise Monad (HTTP Promise, File Promise,
+ * Timer Promise ...) "inherits" it and provides customized logic to finish the promise with data
+ * or error.
+ *
  * @author Dagang Wei (weidagang@gmail.com)
  */
 var callbackless = (function() {

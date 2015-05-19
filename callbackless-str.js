@@ -1,5 +1,7 @@
 /**
  * This module contains a set of commonly used functions which work on the promise of string.
+ *
+ * author: Dagang Wei (weidagang@gmail.com)
  */
 var cbs_str = (function() {
   var cbs = require('./callbackless.js');

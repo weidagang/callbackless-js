@@ -1,3 +1,8 @@
+/**
+ * This module implements the File Promise.
+ *
+ * author: Dagang Wei (weidagang@gmail.com)
+ */
 var cbs_fs = (function() {
   var fs = require('fs');
   var cbs = require('./callbackless.js');
