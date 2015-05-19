@@ -5,7 +5,7 @@ JavaScript is asynchronous in nature, but too many callbacks put the code in a m
 
 Callbackless.js is the effort to abstract away callbacks in a much better way. It's in plain ECMAScript 5, has no dependency on any advanced features of ECMAScript 6 (e.g. Generator), and there's no compilation and ``eval`` involved. It's extremely simple and elegant, but stands on the solid ground of functional abstractions.
 
-The core of callbackless.js is the abstraction of Promise Monad (forget about the Promise you have known in other libraries, they're totally different). A monad is a computational context which returns values of type T. A promise monad is a computational context which will be returning a value of type T in the future (maybe asynchronously). Any operation on a plain type ``T``, e.g. ``toUpperCase :: String -> String``, there's a corresponding one on ``Promise<T>``, e.g. ``toUpperCase$ :: Promise<String> -> Promise<String>``. That's isomorphism. Because the computational context and the value are 2 orthogonal aspects, we can decouple them and reuse the existing functions on type ``T``, which means don't need to reimplement these functions for ``Promise<T>`` from scratch, callbackless.js helps you simply lift them to the promise context, see the example below:
+The core of callbackless.js is the abstraction of Promise Monad (forget about the Promise you have known in other libraries, they're totally different). A monad is a computational context which returns values of type T. A promise monad is a computational context which will be returning a value of type T in the future (maybe asynchronously). Any operation on a plain type ``T``, e.g. ``toUpperCase :: String -> String``, there's a corresponding one on ``Promise<T>``, e.g. ``toUpperCase$ :: Promise<String> -> Promise<String>``. That's isomorphism. Because the computational context and the value are 2 orthogonal aspects, we can decouple them and reuse the existing functions on type ``T``, which means don't need to reimplement these functions for ``Promise<T>`` from scratch, callbackless.js helps you simply lift them to the promise context, see the example below (*promises and functions on promises are named as xxx$*):
 
 ```javascript
 // we have a function of type Int -> Int -> Int
@@ -21,7 +21,7 @@ var result$ = squareSum$(p1$, p2$); // p1$, p2$ and result$ are promises of Int
 
 It turns out that callbackless.js is not only a successful application of Functor and Monad in JavaScript, but also a great tutorial to advanced functional programming for JavaScript programmers. I have the faith that every JavaScript programmer would be able to understand the "scary monsters" with this library.
 
-Now, let's get a sense of how the code looks like with a sample code (*promises and functions on promises are named as xxx$*):
+Now, let's get a sense of how the code looks like with a sample code:
 
 ```javascript
 // import the core APIs
