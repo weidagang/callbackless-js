@@ -16,7 +16,7 @@ var squareSum = function (x, y) { return x * x + y * y; };
 var squareSum$ = liftA(squareSum);
 
 // apply it to Promise<Int> the same way as you apply squareSum to Int
-var result$ = squareSum$(p1$, p2$); // p1$ and p2$ are promises of Int.
+var result$ = squareSum$(p1$, p2$); // p1$, p2$ and result$ are promises of Int
 ```
 
 It turns out that callbackless.js is not only a successful application of Functor and Monad in JavaScript, but also a great tutorial to advanced functional programming for JavaScript programmers. I have the faith that every JavaScript programmer would be able to understand the "scary monsters" with this library.
