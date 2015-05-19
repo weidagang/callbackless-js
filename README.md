@@ -12,7 +12,7 @@ The core of callbackless.js is the abstraction of Promise Monad. Forget about th
 var squareSum = function (x, y) { return x * x + y * y; };
 
 // lift it to a function of type :: Promise<Int> -> Promise<Int> -> Promise<Int>,
-// then it can work on promises.
+// then it's all set to work on promises.
 var squareSum$ = liftA(squareSum);
 
 // apply it to Promise<Int> the same way you apply it to Int
