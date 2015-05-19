@@ -9,9 +9,11 @@ The core of callbackless.js is the abstraction of Promise Monad. Forget about th
 
 It turns out that callbackless.js is not only a successful application of Functor and Monad in JavaScript, but also a great tutorial to advanced functional programming for JavaScript programmers. I have the faith that every JavaScript programmer would be able to understand the "scary monsters" with this library.
 
-Now, let's get a sense of how the code looks like with a sample code (naming convention: promises and functions on promises are named as ``xxx$``):
+Now, let's get a sense of how the code looks like with a sample code:
 
 ```javascript
+// Naming convention: promises and functions on promises are named as xxx$.
+
 // import the core APIs
 var cbs = require('../callbackless.js');
 var unit = cbs.unit;
