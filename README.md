@@ -97,13 +97,15 @@ function testFilePromise_monad() {
 }
 
 /**
- * This test case demonstrates code reuse by lifting a function on type T into a function on type Promise<T>.
+ * This test case demonstrates code reuse by lifting a function on type T into a
+ * function on type Promise<T>.
  */
 function testPromise_liftA() {
   // we have a function of type :: Int -> Int -> Int
   var squareSum = function (x, y) { return x * x + y * y; };
   
-  // lift it to a function of type :: Promise<Int> -> Promise<Int> -> Promise<Int>, then it can work on promises.
+  // lift it to a function of type :: Promise<Int> -> Promise<Int> -> Promise<Int>,
+  // then it can work on promises.
   var squareSum$ = liftA(squareSum);
 
   assertEquals$(unit(13), squareSum$(unit(2), unit(3)));
