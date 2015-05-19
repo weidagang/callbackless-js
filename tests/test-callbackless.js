@@ -1,14 +1,14 @@
 var assert = require('assert');
 
 // import the core APIs from the callbackless module
-var cbs = require('../callbackless.js');
+var cbs = require('../src/callbackless.js');
 var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
 
 // import the testing utils
-var cbs_testing = require('../callbackless-testing.js');
+var cbs_testing = require('../src/callbackless-testing.js');
 var print$ = cbs_testing.print$;
 var assertEquals$ = cbs_testing.assertEquals$;
 

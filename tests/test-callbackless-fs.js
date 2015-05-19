@@ -2,7 +2,7 @@ var assert = require('assert');
 var path = require('path');
 
 // import the core APIs
-var cbs = require('../callbackless.js');
+var cbs = require('../src/callbackless.js');
 var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
@@ -10,17 +10,17 @@ var flatMap = cbs.flatMap;
 var continue$ = cbs.continue$;
 
 // import the file APIs
-var cbs_fs = require('../callbackless-fs.js');
+var cbs_fs = require('../src/callbackless-fs.js');
 var readFile = cbs_fs.readFile;
 var readFile$ = cbs_fs.readFile$;
 
 // import the string APIs
-var cbs_str = require('../callbackless-str.js');
+var cbs_str = require('../src/callbackless-str.js');
 var toUpperCase$ = cbs_str.toUpperCase$;
 var concat$ = cbs_str.concat$;
 
 // import the testing APIs
-var cbs_testing = require('../callbackless-testing.js');
+var cbs_testing = require('../src/callbackless-testing.js');
 var print$ = cbs_testing.print$;
 var assertEquals$ = cbs_testing.assertEquals$;
 
