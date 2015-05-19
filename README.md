@@ -108,7 +108,7 @@ function testPromise_liftA() {
   // then it can work on promises.
   var squareSum$ = liftA(squareSum);
 
-  assertEquals$(unit(13), squareSum$(unit(2), unit(3)));
+  assertEquals$(unit(5), squareSum$(unit(1), unit(2)));
 }
 ```
 
