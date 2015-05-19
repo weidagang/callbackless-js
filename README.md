@@ -15,7 +15,7 @@ var squareSum = function (x, y) { return x * x + y * y; };
 // then it's all set to work on promises.
 var squareSum$ = liftA(squareSum);
 
-// apply it to Promise<Int> the same way you apply it to Int
+// apply it to Promise<Int> the same way you apply squareSum to Int
 var result$ = squareSum$(unit(2), unit(3));
 ```
 
