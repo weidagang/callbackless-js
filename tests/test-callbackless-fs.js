@@ -1,4 +1,5 @@
 var assert = require('assert');
+var path = require('path');
 
 // import the core APIs
 var cbs = require('../callbackless.js');
@@ -24,27 +25,18 @@ var print$ = cbs_testing.print$;
 var assertEquals$ = cbs_testing.assertEquals$;
 
 /**
- * This test case tests file promise API of callbackless.
+ * This test case reads 2 files asynchronously, converts the contents of the first file to upper
+ * case, concatenates it with the contents of the second file.
  *
- * The point is to demonstrate using sync code to express async logic with promises. Under the
- * hood, the test case calls the fs.readFile(path, encoding, callback) async API of Node, therefore
- * there's no blocking calls. But with the file promise API of callbackless-fs, all the async code
- * is abstracted away, you can never find any callbacks in the code.
- *
- * Naming convention for variables (and functions): 
- *
- * <data>$: the promise for the data, e.g. data1$ means the promise of the data in file1
- * <fn>$: the lifted function for the original function fn, which accepts and returns promises, e.g.
- *        the toUpperCase$ is the lifted function for toUpperCase which works on string promises.
+ * There're 2 async file reading operations under the hood, but you see no callbacks.
  */
 function testFilePromise_functor() {
   console.log('Running ' + arguments.callee.name);
 
   // readFile returns a promise of the data which will be available in the future, but we can do
   // operations on it immediately before it's actually available.
-  var data1$ = readFile('data/data_1.txt'); // at this point we don't know the content of data_1.txt
-  var data2$ = readFile('data/data_2.txt'); // at this point we don't know the content of data_2.txt
-  var data3$ = readFile('data/data_3.txt'); // at this point we don't know the content of data_3.txt
+  var data1$ = readFile(path.join(__dirname, '/data/data_1.txt')); // at this point we don't know the content of data_1.txt
+  var data2$ = readFile(path.join(__dirname, '/data/data_2.txt')); // at this point we don't know the content of data_2.txt
   
   // apply toUpperCase$ to a promise of string and return another promise of string. The actual value
   // may not be available at this point, but we don't care.
@@ -82,10 +74,11 @@ function testFilePromise_functor() {
  */
 function testFilePromise_monad() {
   console.log('Running ' + arguments.callee.name);
-
-  var path1 = 'data/file_1.txt';
-  var path2$ = readFile('data/file_1.txt');
-  var path3$ = readFile$(path2$);
+  // pathJoin :: Promise<String> ... -> Promise<String>
+  var pathJoin$ = liftA(path.join);
+  var path1 = path.join(__dirname, 'data/file_1.txt');
+  var path2$ = pathJoin$(unit(__dirname), readFile(path1));
+  var path3$ = pathJoin$(unit(__dirname), readFile$(path2$));
   var data3$ = readFile$(path3$);
   var expectedData3$ = unit('Hey, I am here!')
   var passed$ = assertEquals$(expectedData3$, data3$);
