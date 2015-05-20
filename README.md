@@ -1,7 +1,7 @@
 callbackless.js - abstract away callbacks
 =======
 
-JavaScript is asynchronous in nature, but too many callbacks put the code in a mess. Over the years, the community has invented a bunch of libraries trying to make it possible to write sync-style code to express async logic. However, it seems to me that until today none of them is doing the thing right. The Promise abstraction in some of the libraries looks awkward, it doesn't make much sense than the async APIs, we still smell callbacks. And some other libraries involve a compilation and ``eval``, which is unnecessarily heavyweight and complex.
+JavaScript is asynchronous in nature, but too many callbacks put the code in a mess. Over the years, the community has invented a bunch of libraries trying to make it possible to write sync-style code to express async logic. However, it seems to me that until today none of them is doing the thing right. The Promise abstraction in some of the libraries looks awkward, it doesn't make much sense than the async APIs, we still smell callbacks. And some other libraries involve a compilation and ``eval``, which is unnecessarily heavyweight and complex for 99% of the use cases.
 
 Callbackless.js is the effort to abstract away callbacks in a much better way. It's in plain ECMAScript 5, has no dependency on any advanced features of ECMAScript 6 (e.g. Generator), and there's no compilation and ``eval`` involved. It's extremely simple and elegant, but stands on the solid ground of functional abstractions.
 
