@@ -23,7 +23,7 @@ It turns out that callbackless.js is not only a successful application of Functo
 
 Now, let's get a sense of how the code looks like with a few more practical test cases. Firstly, you'll need to import some APIs:
 
-* Import *
+**Import**
 
 ```javascript
 // import the core APIs
