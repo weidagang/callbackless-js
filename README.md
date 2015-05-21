@@ -21,7 +21,7 @@ var result$ = squareSum$(p1$, p2$); // p1$, p2$ and result$ are promises of Int
 
 It turns out that callbackless.js is not only a successful application of Functor and Monad in JavaScript, but also a great tutorial to advanced functional programming for JavaScript programmers. I have the faith that every JavaScript programmer would be able to understand the "scary monsters" with this library.
 
-Now, let's get a sense of how the code looks like with a few sample cases:
+Now, let's get a sense of how the code looks like with a few more practical test cases. Firstly, you'll need to import some APIs:
 
 ```javascript
 // import the core APIs
@@ -45,15 +45,13 @@ var concat$ = cbs_str.concat$;
 // import the testing APIs
 var cbs_testing = require('../callbackless-testing.js');
 var assertEquals$ = cbs_testing.assertEquals$;
+```
 
-/**
- * This test case reads 2 text files asynchronously, converts the contents of
- * the first file to upper case, then concatenates it with the contents of the
- * second file.
- *
- * During the execution, there're 2 async file reading operations, but you see
- * no callbacks.
- */
+### Test Case 1 ###
+
+This test case reads 2 text files asynchronously, converts the contents of the first file to upper case, then concatenates it with the contents of the second file. At runtime, there're 2 async file reading operations, but you see no callbacks.
+
+```javascript
 function testFilePromise_functor() {
   // readFile :: String -> Promise<String>
   // readFile returns a promise of the contents of the file
@@ -80,15 +78,13 @@ function testFilePromise_functor() {
   // be invoked when both of the 2 promises are finished.
   assertEquals$(expectedData1AndData2$, data1AndData2$);
 }
+```
 
-/**
- * The test data contains 3 files. The contents of the previous file is the path
- * of the next file. This test starts from the path of the first file, then
- * follows the path one by one until the third file.
- *
- * During the execution, there're 3 async file reading operations, but you see
- * no callbacks.
- */
+### Test Case 2 ###
+
+The test data contains 3 files. The contents of the previous file is the path of the next file. This test starts from the path of the first file, then follows the path one by one until the third file. At runtime, there're 3 async file reading operations, but you see no callbacks.
+
+```javascript
 function testFilePromise_monad() {
   var path1 = 'data/file_1.txt';
 
@@ -104,21 +100,6 @@ function testFilePromise_monad() {
   var data3$ = readFile$(path3$);
   var expectedData3$ = unit('Hey, I am here!')
   assertEquals$(expectedData3$, data3$);
-}
-
-/**
- * This test case demonstrates code reuse by lifting a function on type T into a
- * function on type Promise<T>.
- */
-function testPromise_liftA() {
-  // we have a function of type :: Int -> Int -> Int
-  var squareSum = function (x, y) { return x * x + y * y; };
-  
-  // lift it to a function of type :: Promise<Int> -> Promise<Int> -> Promise<Int>,
-  // then it can work on promises.
-  var squareSum$ = liftA(squareSum);
-
-  assertEquals$(unit(5), squareSum$(unit(1), unit(2)));
 }
 ```
 
