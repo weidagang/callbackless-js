@@ -49,7 +49,7 @@ var cbs_testing = require('../callbackless-testing.js');
 var assertEquals$ = cbs_testing.assertEquals$;
 ```
 
-### Test Case 1 ###
+**Test Case 1**
 
 This test case reads 2 text files asynchronously, converts the contents of the first file to upper case, then concatenates it with the contents of the second file. At runtime, there're 2 async file reading operations, but you see no callbacks.
 
@@ -82,7 +82,7 @@ function testFilePromise_functor() {
 }
 ```
 
-### Test Case 2 ###
+**Test Case 2**
 
 The test data contains 3 files. The contents of the previous file is the path of the next file. This test starts from the path of the first file, then follows the path one by one until the third file. At runtime, there're 3 async file reading operations, but you see no callbacks.
 
