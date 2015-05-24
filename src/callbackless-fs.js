@@ -13,19 +13,19 @@ var cbs_fs = (function() {
    * readFile :: String -> String -> Promise<String>
    * @param path :: String
    * @param encoding :: String
-   * @return promise :: Promise<String>
+   * @return data$ :: Promise<String>
    */
   function readFile(path, encoding) {
     var _encoding = encoding || 'utf8';
-    var _promise = cbs.promise(path);
+    var data$ = cbs.promise();
     fs.readFile(path, _encoding, function(error, data) {
       if (error) {
-        _promise.__notifyFailure__(error);
+        data$.__notifyFailure__(error);
       } else {
-        _promise.__notifySuccess__(data);
+        data$.__notifySuccess__(data);
       }
     });
-    return _promise;
+    return data$;
   }
 
   /**
@@ -34,7 +34,7 @@ var cbs_fs = (function() {
    * readFile$ :: Promise<String> -> Promise<String> -> Promise<String>
    * @param path$ :: Promise<String>
    * @param encoding$ :: Promise<String>
-   * @return promise :: Promise<String>
+   * @return data$ :: Promise<String>
    */
   function readFile$(path$, encoding$) {
     return cbs.flatMap(readFile)(path$, encoding$);

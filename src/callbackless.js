@@ -1,7 +1,7 @@
 /**
- * This module implements the Promise Monad. A specific Promise Monad (HTTP Promise, File Promise,
- * Timer Promise ...) "inherits" it and provides customized logic to finish the promise with data
- * or error.
+ * This module implements the Promise Monad. A specific type of Promise Monad (HTTP Promise, File 
+ * Promise, Timer Promise ...) "inherits" it and provides customized logic to finish the promise
+ * with data or error.
  *
  * @author Dagang Wei (weidagang@gmail.com)
  */
@@ -18,29 +18,26 @@ var callbackless = (function() {
    * @return promise of data
    */
   function promise(options) {
-    /** 
-     * The state of the promise 
-     *
-     * _state :: enum('PENDING', 'SUCCEEDED', 'FAILED')
-     */
-    var _state = 'PENDING';
+    var _state = 'PENDING'; // The state of the promise :: enum('PENDING', 'SUCCEEDED', 'FAILED')
     var _data; // the data of the promise
     var _error; // the error of the promise
     var _successListeners = []; // listeners for data
     var _failureListeners = []; // listeners for error
     var _finishListeners = []; // listeners for finish
-    var _options = options || {
-      /**
-       * Converts error to data. Returns null by default. The user can provide
-       * the customized implementation. It's common to throw an exception.
-       *
-       * errorToData :: Error -> Data
-       * @param error :: Error
-       * @return void
-       * @throws exception if no meaningful data to return
-       */
-      errorToData : function (error) { return null; }
-    };
+    var _options = (options != null) ? options : { __errorToData__ : __errorToData__ }; 
+
+    /**
+     * Converts error to data. Returns null by default. The user can provide
+     * the customized implementation. It's common to throw an exception.
+     *
+     * errorToData :: Error -> Data
+     * @param error :: Error
+     * @return void
+     * @throws exception if no meaningful data to return
+     */
+    function __errorToData__(error) {
+      return null;
+    }
     
     /**
      * Notifies success of the promise.
@@ -160,7 +157,7 @@ var callbackless = (function() {
      * Gets the data of the promise.
      *
      * If the promise is in FAILED state, it will try to get a default value by
-     * calling {@code options.errorToData}.
+     * calling {@code options.__errorToData__}.
      *
      * getData :: void -> Data
      * @return the data of the promise
@@ -172,7 +169,7 @@ var callbackless = (function() {
       } else if (_state == 'SUCCEEDED') {
         return _data;
       } else if (_state == 'FAILED') {
-        return _options.errorToData(_error);
+        return _options.__errorToData__(_error);
       }
     }
 
@@ -202,9 +199,57 @@ var callbackless = (function() {
    * @return promise :: Promise<T>
    */
   function unit(data) {
-    var p = promise();
-    p.__notifySuccess__(data);
-    return p;
+    var p$ = promise();
+    p$.__notifySuccess__(data);
+    return p$;
+  }
+
+  /**
+   * Returns a promise of boolean indicating if the promise succeeded.
+   *
+   * isSuccess$ :: Promise<T> -> Promise<Boolean>
+   */
+  function isSuccess$(promise$) {
+    var p$ = promise();
+    promise$.succeed(function (data) {
+      p$.__notifySuccess__(true);
+    });
+    promise$.fail(function (error) {
+      p$.__notifySuccess__(false);
+    });
+    return p$;
+  }
+
+  /**
+   * Returns a promise of boolean indicating if the promise failed.
+   *
+   * isFailure$ :: Promise<T> -> Promise<Boolean>
+   */
+  function isFailure$(promise$) {
+    var p$ = promise();
+    promise$.succeed(function (data) {
+      p$.__notifySuccess__(false);
+    });
+    promise$.fail(function (error) {
+      p$.__notifySuccess__(true);
+    });
+    return p$;
+  }
+  
+  /**
+   * Gets the promise of "the error of a promise".
+   *
+   * getError$ :: Promise<T> -> Promise<E>
+   */
+  function getError$(promise$) {
+    var e$ = promise();
+    promise$.succeed(function (data) {
+      e$.__notifyFailure__(null); // no error, so the promise of error failed.
+    });
+    promise$.fail(function (error) {
+      e$.__notifySuccess__(error); // error happened, this is what we want.
+    });
+    return e$;
   }
   
   /**
@@ -218,15 +263,15 @@ var callbackless = (function() {
    * @return liftedF :: Promise<T> -> Promise<R>
    */
   function fmap(f) {
-    var liftedF = function (promiseT) {
-      var promiseR = promise();
-      promiseT.succeed(function (data) {
-        promiseR.__notifySuccess__(f(data));
+    var liftedF = function (t$) {
+      var r$ = promise();
+      t$.succeed(function (data) {
+        r$.__notifySuccess__(f(data));
       });
-      promiseT.fail(function (error) {
-        promiseR.__notifyFailure__(error);
+      t$.fail(function (error) {
+        r$.__notifyFailure__(error);
       });
-      return promiseR;
+      return r$;
     };
     return liftedF;
   }
@@ -238,22 +283,22 @@ var callbackless = (function() {
    * @param promiseOfPromiseT :: Promise<Promise<T>>
    * @return promiseT :: Promise<T>
    */
-  function join(promiseOfPromiseT) {
-    var promiseT = promise();
+  function join(t$$) {
+    var t$ = promise();
     // the outer layer of promise
-    promiseOfPromiseT.succeed(function (innerPromiseT) {
+    t$$.succeed(function (innerPromiseT) {
       // the inner layer of promise
       innerPromiseT.succeed(function (data) {
-        promiseT.__notifySuccess__(data);
+        t$.__notifySuccess__(data);
       });
       innerPromiseT.fail(function (error) {
-        promiseT.__notifyFailure__(error);
+        t$.__notifyFailure__(error);
       });
     });
-    promiseOfPromiseT.fail(function (error) {
-      promiseT.__notifyFailure__(error);
+    t$$.fail(function (error) {
+      t$.__notifyFailure__(error);
     });
-    return promiseT;
+    return t$;
   }
 
   /**
@@ -267,12 +312,12 @@ var callbackless = (function() {
    * @return liftedF :: Promise<T> -> Promise<R>
    */
   function flatMap(f) {
-    var liftedF = function (promiseT) {
+    var liftedF = function (t$) {
       // fmap(f) :: (T -> Promise<R>) -> Promise<T> -> Promise<Promise<R>>
-      // promiseOfPromiseR :: Promise<Promise<R>>
-      var promiseOfPromiseR = fmap(f)(promiseT);
-      var promiseR = join(promiseOfPromiseR);
-      return promiseR;
+      // r$$ :: Promise<Promise<R>>
+      var r$$ = fmap(f)(t$);
+      var r$ = join(r$$);
+      return r$;
     };
     return liftedF;
   }
@@ -293,15 +338,15 @@ var callbackless = (function() {
       var numArgs = arguments.length;
       var r$ = promise();
       var finishedCount = 0;
-      var promisesT = [];
+      var t$s = [];
       for (var i = 0; i < arguments.length; i++) {
         var arg$ = arguments[i];
-        promisesT.push(arg$);
+        t$s.push(arg$);
         arg$.finish(function (state, data, error) {
           finishedCount++;
           // all the promises have finished
           if (finishedCount == numArgs) {
-            var args = promisesT.map(function (t$) { return t$.data(); });
+            var args = t$s.map(function (t$) { return t$.data(); });
             var r = f.apply(null, args);
             r$.__notifySuccess__(r);
           }
@@ -317,9 +362,8 @@ var callbackless = (function() {
    * Chains 2 promises.
    */
   function chain$(p1$, p2$) {
-    p1$
-      .succeed(function(data) { p2$.__notifySuccess__(data); })
-      .fail(function(error) { p2$.__notifyFailure__(error); });
+    p1$.succeed(function(data) { p2$.__notifySuccess__(data); })
+    p1$.fail(function(error) { p2$.__notifyFailure__(error); });
   }
   
   /**
@@ -348,7 +392,14 @@ var callbackless = (function() {
     liftA : liftA,
     join : join,
     flatMap : flatMap,
+    isSuccess$ : isSuccess$,
+    isFailure$ : isFailure$,
+    getError$ : getError$,
     continue$ : continue$,
+
+    null$ : unit(null),
+    true$ : unit(true),
+    false$ : unit(false),
   };
 })();
 

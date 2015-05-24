@@ -7,7 +7,11 @@ var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
+var null$ = cbs.null$;
 var continue$ = cbs.continue$;
+var isSuccess$ = cbs.isSuccess$;
+var isFailure$ = cbs.isFailure$;
+var getError$ = cbs.getError$;
 
 // import the file APIs
 var cbs_fs = require('../src/callbackless-fs.js');
@@ -23,6 +27,7 @@ var concat$ = cbs_str.concat$;
 var cbs_testing = require('../src/callbackless-testing.js');
 var print$ = cbs_testing.print$;
 var assertEquals$ = cbs_testing.assertEquals$;
+var assertTrue$ = cbs_testing.assertTrue$;
 
 /**
  * This test case reads 2 files asynchronously, converts the contents of the first file to upper
@@ -86,14 +91,30 @@ function testFilePromise_monad() {
   return passed$;
 }
 
+/**
+ * This test cases tests error handling of the File Promise.
+ */
+function testFilePromise_errorHandling() {
+  console.log('Running ' + arguments.callee.name);
+
+  var data$ = readFile('data/nonexistent-file-1.txt');
+  var error$ = getError$(data$);
+  var errorCode$ = fmap(function (error) { return error.code; })(error$);
+  assertTrue$(isFailure$(data$));
+  assertEquals$(null$, data$);
+  assertEquals$(unit('ENOENT'), errorCode$);
+}
+
 function _toUpperCase(str) {
   return str.toUpperCase();
 }
 
 function runTests() {
-  var result1$ = testFilePromise_functor();
-  var result2$ = continue$(result1$, testFilePromise_monad);
-  continue$(result2$, function() { console.log("Done"); });
+  print$(unit('Start testing ' + __filename.slice(__filename.lastIndexOf(path.sep)+1)));
+  var passed1$ = testFilePromise_functor();
+  var passed2$ = continue$(passed1$, testFilePromise_monad);
+  var passed3$ = continue$(passed2$, testFilePromise_errorHandling);
+  continue$(passed3$, function() { console.log("Done\n"); });
 }
 
 runTests();

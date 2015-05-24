@@ -1,4 +1,5 @@
 var assert = require('assert');
+var path = require('path');
 
 // import the core APIs from the callbackless module
 var cbs = require('../src/callbackless.js');
@@ -54,8 +55,10 @@ function testTimerPromise_liftA() {
 }
 
 function runTests() {
-  var $passed1 = testTimerPromise_fmap();
-  var $passed2 = continue$($passed1, testTimerPromise_liftA);
+  print$(unit('Start testing ' + __filename.slice(__filename.lastIndexOf(path.sep)+1)));
+  var passed1$ = testTimerPromise_fmap();
+  var passed2$ = continue$(passed1$, testTimerPromise_liftA);
+  continue$(passed2$, function() { console.log("Done\n"); });
 }
 
 runTests();

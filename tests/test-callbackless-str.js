@@ -1,4 +1,5 @@
 var assert = require('assert');
+var path = require('path');
 
 // import the core APIs from the callbackless module
 var cbs = require('../src/callbackless.js');
@@ -6,6 +7,7 @@ var unit = cbs.unit;
 var fmap = cbs.fmap;
 var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
+var continue$ = cbs.continue$;
 
 // import the string APIs from the callbackless-str module
 var cbs_str = require('../src/callbackless-str.js');
@@ -30,6 +32,8 @@ function testStringPromise_charAt$() {
   assertEquals$(unit("h"), c0$);
   assertEquals$(unit("o"), c4$);
   assertEquals$(unit(""), c999$);
+
+  return unit(true);
 }
 
 function testStringPromise_toUpperCase$() {
@@ -38,6 +42,8 @@ function testStringPromise_toUpperCase$() {
   assertEquals$(unit(null), toUpperCase$(unit(null)));
   assertEquals$(unit(""), toUpperCase$(unit("")));
   assertEquals$(unit("HELLO CALLBACKLESS"), toUpperCase$(unit("Hello Callbackless")));
+
+  return unit(true);
 }
 
 function testStringPromise_concat$() {
@@ -50,12 +56,16 @@ function testStringPromise_concat$() {
   assertEquals$(unit("hello "), concat$(str1$));
   assertEquals$(unit("hello callbackless"), concat$(str1$, str2$));
   assertEquals$(unit("hello callbackless!"), concat$(str1$, str2$, str3$));
+
+  return unit(true);
 }
 
 function runTests() {
-  testStringPromise_charAt$();
-  testStringPromise_toUpperCase$();
-  testStringPromise_concat$();
+  print$(unit('Start testing ' + __filename.slice(__filename.lastIndexOf(path.sep)+1)));
+  var passed1$ = testStringPromise_charAt$();
+  var passed2$ = continue$(passed1$, testStringPromise_toUpperCase$);
+  var passed3$ = continue$(passed2$, testStringPromise_concat$);
+  continue$(passed3$, function() { console.log("Done\n"); });
 }
 
 runTests();

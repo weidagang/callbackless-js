@@ -18,6 +18,8 @@ var cbs_testing = (function() {
 
   /**
    * Asserts 2 promises are equal.
+   *
+   * assertEquals$ :: Promise<T> -> Promise<T> -> Promise<Boolean>
    */
   var assertEquals$ = liftA(function (expected, actual) {
     assert(
@@ -25,11 +27,31 @@ var cbs_testing = (function() {
     console.log("ASSERTION PASSED");
     return true;
   });
+
+  /**
+   * Asserts a promises is unit(true).
+   *
+   * assertTrue$ :: Promise<T> -> Promise<Boolean>
+   */
+  var assertTrue$ = function (value$) {
+    return assertEquals$(unit(true), value$);
+  };
+
+  /**
+   * Asserts a promises is unit(false).
+   *
+   * assertFalse$ :: Promise<T> -> Promise<Boolean>
+   */
+  var assertFalse$ = function (value$) {
+    return assertEquals$(unit(false), value$);
+  };
   
   // module exports
   return {
     print$ : print$,
     assertEquals$ : assertEquals$,
+    assertTrue$ : assertTrue$,
+    assertFalse$ : assertFalse$,
   };
 })();
 
