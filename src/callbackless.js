@@ -254,7 +254,8 @@ var callbackless = (function() {
   
   /**
    * Lifts a function of type T -> R into a function of type
-   * Promise<T> -> Promise<R>.
+   * Promise<T> -> Promise<R>. The underlying function f will
+   * only be invoked when the promise is fulfilled.
    *
    * fmap makes a Functor.
    *

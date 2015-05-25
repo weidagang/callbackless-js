@@ -9,8 +9,6 @@ var liftA = cbs.liftA;
 var flatMap = cbs.flatMap;
 var null$ = cbs.null$;
 var continue$ = cbs.continue$;
-var isSuccess$ = cbs.isSuccess$;
-var isFailure$ = cbs.isFailure$;
 var getError$ = cbs.getError$;
 
 // import the file APIs
@@ -92,17 +90,25 @@ function testFilePromise_monad() {
 }
 
 /**
- * This test cases tests error handling of the File Promise.
+ * This test cases tests error handling of the File Promise. Try to read a file, if succeed, print
+ * the contents, otherwise check the error code.
  */
 function testFilePromise_errorHandling() {
   console.log('Running ' + arguments.callee.name);
 
+  // Only one of data$ and error$ can be successful. We don't use if/else statement, but make our
+  // data hander and error hander work on them separately.
   var data$ = readFile('data/nonexistent-file-1.txt');
   var error$ = getError$(data$);
+
+  // 1. success case
+  print$(data$); // the underlying print will not be invoked, because we intent to fail.
+  
+  // 2. error case
   var errorCode$ = fmap(function (error) { return error.code; })(error$);
-  assertTrue$(isFailure$(data$));
-  assertEquals$(null$, data$);
-  assertEquals$(unit('ENOENT'), errorCode$);
+  var passed$ = assertEquals$(unit('ENOENT'), errorCode$);
+
+  return passed$;
 }
 
 function _toUpperCase(str) {
